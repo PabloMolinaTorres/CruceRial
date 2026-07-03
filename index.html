@@ -9,21 +9,21 @@
 
   <style>
     :root {
-      --bg: #eef2f4;
+      --bg: #f2f5f7;
       --paper: #ffffff;
-      --paper-soft: #f6f8f9;
-      --ink: #18212f;
-      --muted: #657184;
-      --line: #dfe6ea;
-      --line-strong: #b8c3cb;
-      --dark: #17202b;
-      --green: #b9df6a;
-      --green-strong: #91bf22;
+      --paper-soft: #f5f6f7;
+      --ink: #111827;
+      --muted: #667085;
+      --line: #d9dee4;
+      --line-strong: #b9c0c8;
+      --dark: #1f2933;
+      --green: #99c221;
+      --green-soft: #e9f5c7;
       --blue: #2563eb;
       --red: #d33434;
       --amber: #ca7a00;
-      --shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
-      --radius: 18px;
+      --shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
     }
 
     body.dark {
@@ -36,8 +36,8 @@
       --line-strong: #516070;
       --dark: #f8fafc;
       --green: #a9d94f;
-      --green-strong: #b9ef5f;
-      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      --green-soft: #25370f;
+      --shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
     }
 
     * { box-sizing: border-box; }
@@ -45,7 +45,7 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: radial-gradient(circle at top, rgba(185, 223, 106, 0.18), transparent 34%), var(--bg);
+      background: var(--bg);
       color: var(--ink);
     }
 
@@ -53,45 +53,50 @@
     button, a { -webkit-tap-highlight-color: transparent; }
 
     .topbar {
-      height: 58px;
-      background: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(14px);
+      height: 46px;
+      background: var(--paper);
       border-bottom: 1px solid var(--line);
+      border-top: 3px solid var(--green);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 22px;
+      padding: 0 18px;
       position: sticky;
       top: 0;
       z-index: 40;
     }
 
-    body.dark .topbar { background: rgba(17, 27, 38, 0.86); }
-
     .brand-word {
-      font-size: 20px;
+      border: 0 !important;
+      background: transparent !important;
+      color: var(--ink) !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      height: auto !important;
+      font-size: 22px !important;
       letter-spacing: 0.02em;
-      font-weight: 500;
+      font-weight: 500 !important;
+      cursor: pointer;
     }
 
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 10px;
       justify-content: flex-end;
     }
 
     .module-tab,
     .theme-toggle,
     .user-pill,
+    .menu-pill,
     .version {
-      height: 34px;
-      border: 1px solid var(--line);
-      background: var(--paper);
-      color: var(--muted);
+      height: 30px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ink);
       border-radius: 999px;
-      padding: 0 12px;
+      padding: 0 10px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -100,89 +105,76 @@
       font-weight: 700;
       text-decoration: none;
       white-space: nowrap;
-    }
-
-    .module-tab.active {
-      background: var(--green);
-      color: #17202b;
-      border-color: var(--green);
-    }
-
-    .theme-toggle {
-      width: 34px;
-      padding: 0;
       cursor: pointer;
-      color: var(--ink);
     }
 
-    .version { font-weight: 500; }
+    .module-tab:hover,
+    .theme-toggle:hover,
+    .menu-pill:hover { background: var(--paper-soft); border-color: var(--line); }
+    .module-tab.active:not(.brand-word) { background: var(--green-soft); border-color: var(--green); color: var(--ink); }
+    .theme-toggle, .menu-pill { width: 30px; padding: 0; }
+    .version { display: none; }
 
     main {
-      width: min(1180px, calc(100% - 34px));
-      margin: 26px auto 70px;
+      width: min(920px, calc(100% - 32px));
+      margin: 18px auto 56px;
     }
 
     .workspace {
-      background: rgba(255,255,255,0.64);
+      background: var(--paper);
       border: 1px solid var(--line);
-      border-radius: 28px;
+      border-radius: 16px;
       box-shadow: var(--shadow);
-      padding: 20px;
+      padding: 14px;
     }
-
-    body.dark .workspace { background: rgba(17, 27, 38, 0.64); }
 
     .hello {
       text-align: center;
-      font-size: 26px;
-      letter-spacing: -0.03em;
-      margin: 4px 0 18px;
-      font-weight: 700;
+      font-size: 29px;
+      letter-spacing: -0.04em;
+      margin: 4px 0 8px;
+      font-weight: 500;
     }
 
     .step-panel {
-      background: var(--paper);
+      background: var(--paper-soft);
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 14px;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
     }
 
     .step-title {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--ink);
-      margin: 0 0 10px;
+      margin: 0 0 8px;
+      font-weight: 500;
     }
 
-    .upload-and-status,
-    .flow-and-status {
-      display: grid;
-      grid-template-columns: minmax(280px, 430px) minmax(240px, 1fr);
-      gap: 14px;
-      align-items: stretch;
-    }
+    .upload-and-status { display: block; }
 
     .upload-box {
-      min-height: 92px;
+      min-height: 78px;
       border: 1.5px dashed var(--line-strong);
-      background: var(--paper-soft);
-      border-radius: 15px;
-      padding: 16px;
+      background: #f7f8f9;
+      border-radius: 10px;
+      padding: 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
       transition: 0.18s ease;
       position: relative;
-      text-align: left;
+      text-align: center;
+      width: 100%;
     }
+
+    body.dark .upload-box { background: var(--paper-soft); }
 
     .upload-box:hover,
     .upload-box.dragover {
-      border-color: var(--green-strong);
-      background: rgba(185, 223, 106, 0.12);
-      transform: translateY(-1px);
+      border-color: var(--green);
+      background: rgba(153, 194, 33, 0.09);
     }
 
     .upload-box.loaded {
@@ -190,89 +182,66 @@
       border-color: var(--green);
     }
 
-    .upload-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 13px;
-      background: var(--dark);
-      color: var(--bg);
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      flex: 0 0 auto;
-    }
-
-    body.dark .upload-icon { background: #f8fafc; color: #071017; }
-
+    .upload-icon { display: none; }
     .upload-copy { min-width: 0; }
-    .upload-title { font-size: 15px; font-weight: 800; }
-    .upload-subtitle, .file-name { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .upload-title { display: none; }
+    .upload-subtitle { display: none; }
+    .file-name { font-size: 11px; color: var(--muted); margin-top: 6px; }
 
     .upload-btn {
-      height: 28px;
+      height: 30px;
       border-radius: 7px;
-      padding: 0 10px;
+      padding: 0 14px;
       display: inline-flex;
       align-items: center;
-      background: var(--paper);
-      border: 1px solid var(--line);
-      font-size: 11px;
+      background: var(--dark);
+      color: var(--bg);
+      border: 1px solid transparent;
+      font-size: 12px;
       font-weight: 800;
-      margin-top: 7px;
-      color: var(--ink);
+      gap: 8px;
     }
+
+    .upload-btn::before { content: "⇧"; font-size: 16px; line-height: 1; }
 
     .upload-status {
       position: absolute;
-      top: 9px;
-      right: 9px;
+      top: 7px;
+      right: 7px;
     }
 
     input[type="file"] { display: none; }
-
-    .status-box {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: var(--paper-soft);
-      padding: 14px;
-      display: grid;
-      align-content: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .status-box strong { color: var(--ink); font-size: 14px; }
-    .status-box small { color: var(--muted); }
+    .status-box { display: none; }
 
     .flow-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(150px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      width: 100%;
     }
 
     .flow-card {
-      min-height: 104px;
-      border: 1px solid var(--line);
+      min-height: 106px;
+      border: 1px solid var(--line-strong);
       background: var(--paper);
-      border-radius: 18px;
+      border-radius: 16px;
       padding: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 6px;
+      display: grid;
+      grid-template-columns: 1fr 30px;
+      grid-template-rows: 1fr auto;
+      align-items: center;
+      gap: 4px 8px;
       cursor: pointer;
       text-decoration: none;
       color: var(--ink);
       transition: 0.18s ease;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
       text-align: left;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
     }
 
     .flow-card:hover:not(:disabled) {
-      transform: translateY(-2px);
-      border-color: var(--green-strong);
+      transform: translateY(-1px);
+      border-color: var(--green);
     }
 
     .flow-card:disabled {
@@ -281,39 +250,49 @@
     }
 
     .flow-card strong {
-      font-size: 15px;
-      line-height: 1.15;
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 16px;
+      line-height: 1.16;
       letter-spacing: -0.02em;
+      font-weight: 800;
+      text-transform: uppercase;
     }
 
     .flow-card span {
-      font-size: 11px;
-      color: var(--muted);
+      grid-column: 1 / -1;
+      grid-row: 2;
+      font-size: 10px;
+      color: var(--ink);
       text-transform: uppercase;
-      font-weight: 800;
+      font-weight: 700;
+      opacity: 0.88;
     }
 
     .flow-icon {
-      width: 28px;
-      height: 28px;
+      grid-column: 2;
+      grid-row: 1;
+      width: 30px;
+      height: 30px;
       border-radius: 999px;
       display: grid;
       place-items: center;
-      background: var(--paper-soft);
-      border: 1px solid var(--line);
-      font-size: 15px;
+      background: transparent;
+      border: 0;
+      font-size: 24px;
+      color: var(--ink);
     }
 
-    .result-panel,
+    .result-panel { display: none !important; }
+
     .admin-panel {
       background: var(--paper);
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 16px;
       padding: 18px;
       margin-top: 14px;
+      box-shadow: var(--shadow);
     }
-
-    .admin-panel { box-shadow: var(--shadow); }
 
     .admin-header {
       display: flex;
@@ -363,7 +342,6 @@
     }
 
     .button-row.two { grid-template-columns: 1fr 1fr; }
-
     button { border: none; }
 
     .btn-primary,
@@ -385,7 +363,6 @@
     .btn-light { background: var(--paper-soft); color: var(--ink); border: 1px solid var(--line); }
     .btn-red { background: var(--red); color: white; }
     .mini-btn { min-height: 34px; background: var(--paper-soft); color: var(--muted); border: 1px solid var(--line); font-size: 12px; }
-
     button:disabled { opacity: 0.42; cursor: not-allowed; }
 
     .metrics {
@@ -407,7 +384,7 @@
 
     .metric span { color: var(--muted); font-size: 12px; }
     .metric strong { display: block; margin-top: 8px; font-size: 28px; letter-spacing: -0.06em; }
-    .metric.green strong { color: var(--green-strong); }
+    .metric.green strong { color: var(--green); }
     .metric.blue strong { color: var(--blue); }
     .metric.amber strong { color: var(--amber); }
 
@@ -423,12 +400,7 @@
     .download-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .download-actions button { min-height: 36px; font-size: 12px; }
 
-    .tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 
     .tab {
       min-height: 36px;
@@ -492,11 +464,11 @@
     .badge-amber { background: #fef3c7; color: #92400e; }
 
     .message {
-      margin-top: 12px;
-      padding: 11px 12px;
-      border-radius: 13px;
-      font-size: 13px;
-      line-height: 1.4;
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.35;
       display: none;
     }
 
@@ -507,36 +479,33 @@
 
     .hidden { display: none !important; }
 
-    @media (max-width: 980px) {
-      .upload-and-status,
-      .flow-and-status,
-      .grid { grid-template-columns: 1fr; }
-      .flow-grid { grid-template-columns: 1fr; }
+    @media (max-width: 760px) {
+      .flow-grid, .grid { grid-template-columns: 1fr; }
       .metrics, .metrics.three { grid-template-columns: 1fr 1fr; }
-      .topbar { height: auto; min-height: 58px; padding: 10px 14px; align-items: flex-start; }
+      .topbar { height: auto; min-height: 46px; padding: 8px 12px; gap: 10px; align-items: center; }
+      .top-actions { gap: 4px; }
+      .user-pill { display: none; }
     }
 
-    @media (max-width: 620px) {
-      main { width: min(100% - 20px, 1180px); }
-      .workspace, .admin-panel, .result-panel { padding: 14px; }
+    @media (max-width: 520px) {
+      main { width: min(100% - 20px, 920px); }
+      .workspace, .admin-panel { padding: 12px; }
+      .flow-card { min-height: 92px; }
       .metrics, .metrics.three { grid-template-columns: 1fr; }
-      .top-actions { gap: 6px; }
-      .version { display: none; }
-      .user-pill { display: none; }
     }
   </style>
 </head>
 
 <body>
   <header class="topbar">
-    <div class="brand-word">FABIA</div>
+    <button class="brand-word module-tab active" data-module="generar">FABIA</button>
 
     <div class="top-actions">
-      <button class="module-tab active" data-module="generar">Inicio</button>
       <button class="module-tab" data-module="actualizar">Base RIAL</button>
       <button class="module-tab" data-module="subclases">Subclases</button>
-      <div class="version" id="firebaseStatus">V2.5 Firestore</div>
+      <div class="version" id="firebaseStatus">V2.7</div>
       <div class="user-pill">👤 Administrador</div>
+      <button class="menu-pill" type="button" title="Menú">☰</button>
       <button class="theme-toggle" id="themeToggle" title="Cambiar modo">🌙</button>
     </div>
   </header>
@@ -548,58 +517,42 @@
 
         <div class="step-panel">
           <p class="step-title">1. Sube el reporte del estudio</p>
-          <div class="upload-and-status">
-            <label class="upload-box" id="boxReporte" for="fileReporte">
-              <span class="upload-status badge badge-gray" id="badgeReporte">Pendiente</span>
-              <div class="upload-icon">⇧</div>
-              <div class="upload-copy">
-                <div class="upload-title">Reporte estudio</div>
-                <div class="upload-subtitle">CSV / XLS / XLSX</div>
-                <div class="upload-btn">CSV. o browse</div>
-                <div class="file-name" id="nameReporte">Sin archivo</div>
-              </div>
-            </label>
-            <input id="fileReporte" type="file" accept=".csv,.xlsx,.xls" />
-
-            <div class="status-box">
-              <strong>Última actualización</strong>
-              <small>Base RIAL: <span id="homeBaseUpdate">Cargando...</span></small>
-              <small>Subclases: <span id="homeSubclasesUpdate">Cargando...</span></small>
-              <button class="mini-btn" id="btnLimpiarGenerar">Limpiar reporte</button>
+          <label class="upload-box" id="boxReporte" for="fileReporte">
+            <span class="upload-status badge badge-gray" id="badgeReporte">Pendiente</span>
+            <div class="upload-copy">
+              <div class="upload-title">Reporte estudio</div>
+              <div class="upload-subtitle">CSV / XLS / XLSX</div>
+              <div class="upload-btn">CSV. or browse</div>
+              <div class="file-name" id="nameReporte">Sin archivo</div>
             </div>
-          </div>
+          </label>
+          <input id="fileReporte" type="file" accept=".csv,.xlsx,.xls" />
+          <button class="mini-btn hidden" id="btnLimpiarGenerar">Limpiar reporte</button>
+          <span class="hidden" id="homeBaseUpdate">Cargando...</span>
+          <span class="hidden" id="homeSubclasesUpdate">Cargando...</span>
           <div class="message" id="msgGenerar"></div>
         </div>
 
         <div class="step-panel">
-          <p class="step-title">2. Selecciona el flujo a procesar</p>
-          <div class="flow-and-status">
-            <div class="flow-grid">
-              <button class="flow-card" id="btnGenerar" disabled>
-                <div class="flow-icon">↻</div>
-                <strong>Generación masiva</strong>
-                <span>Base RIAL + subclases</span>
-              </button>
+          <p class="step-title">2. Selecciona el flujo a procesar (Planilla predeterminada enlazada con base de datos)</p>
+          <div class="flow-grid">
+            <button class="flow-card" id="btnGenerar" disabled>
+              <strong>Generación masiva</strong>
+              <div class="flow-icon">⟳</div>
+              <span>(Base de datos RIAL)</span>
+            </button>
 
-              <button class="flow-card" disabled>
-                <div class="flow-icon">◐</div>
-                <strong>Faceswap con RIAL</strong>
-                <span>En construcción</span>
-              </button>
+            <button class="flow-card" disabled>
+              <strong>Faceswap con RIAL</strong>
+              <div class="flow-icon">◔</div>
+              <span>(Base de datos estudio)</span>
+            </button>
 
-              <a class="flow-card" href="https://pablomolinatorres.github.io/FlujoIA/" target="_blank" rel="noopener noreferrer">
-                <div class="flow-icon">⌂</div>
-                <strong>Home n Deco con WIDA</strong>
-                <span>Abrir flujo</span>
-              </a>
-            </div>
-
-            <div class="status-box">
-              <strong>Base compartida</strong>
-              <small>RIAL: <span id="homeBaseCount">0 SKU</span></small>
-              <small>Subclases: <span id="homeSubclasesCount">0 subclases</span></small>
-              <small>Resultado: MARCA · SKU · GENERO · TIPO</small>
-            </div>
+            <a class="flow-card" href="https://pablomolinatorres.github.io/FlujoIA/" target="_blank" rel="noopener noreferrer">
+              <strong>Home n Deco con WIDA</strong>
+              <div class="flow-icon">⌂</div>
+              <span>(Base de datos estudio)</span>
+            </a>
           </div>
         </div>
 
@@ -811,7 +764,7 @@
       try {
         await refrescarBase();
         await refrescarSubclases();
-        $("firebaseStatus").textContent = "V2.5 Firestore OK";
+        $("firebaseStatus").textContent = "V2.6";
       } catch (error) {
         console.error(error);
         $("firebaseStatus").textContent = "Firestore ERROR";
@@ -1294,7 +1247,12 @@
         document.querySelector('[data-generar-view="formato"]').classList.add("active");
         renderVistaGenerar();
 
-        showMessage("msgGenerar", "ok", "Archivo generado.");
+        if (resultadoFormatoRial.length > 0) {
+          descargarExcel(resultadoFormatoRial, "formato_rial");
+          showMessage("msgGenerar", "ok", "Excel descargado.");
+        } else {
+          showMessage("msgGenerar", "warn", "Sin datos para descargar.");
+        }
       } catch (error) {
         console.error(error);
         showMessage("msgGenerar", "error", "Firestore: " + obtenerDetalleError(error));
