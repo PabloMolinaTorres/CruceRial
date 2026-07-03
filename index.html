@@ -634,7 +634,7 @@
     </div>
 
     <div class="header-actions">
-      <div class="version" id="firebaseStatus">V2.3 Firestore</div>
+      <div class="version" id="firebaseStatus">V2.4 Firestore</div>
       <button class="theme-toggle" id="themeToggle" title="Cambiar modo">🌙</button>
     </div>
   </header>
@@ -737,9 +737,8 @@
                     <button class="btn-light" id="btnLimpiarRial">Limpiar</button>
                   </div>
 
-                  <div class="button-row two">
+                  <div class="button-row">
                     <button class="btn-light" id="btnExportarBase">Exportar base</button>
-                    <button class="btn-red" id="btnBorrarBase">Borrar base</button>
                   </div>
 
                   <div class="message" id="msgRial"></div>
@@ -759,6 +758,9 @@
                       <div class="table-title">
                         <h2>Base RIAL</h2>
                         <p id="subtitleBase">Sin datos.</p>
+                      </div>
+                      <div class="download-actions">
+                        <button class="btn-red" id="btnBorrarBase">Borrar base</button>
                       </div>
                     </div>
                     <div id="emptyBase" class="empty">Sin base cargada.</div>
@@ -877,7 +879,7 @@
       try {
         await refrescarBase();
         await refrescarSubclases();
-        $("firebaseStatus").textContent = "V2.3 Firestore OK";
+        $("firebaseStatus").textContent = "V2.4 Firestore OK";
       } catch (error) {
         console.error(error);
         $("firebaseStatus").textContent = "Firestore ERROR";
@@ -1138,6 +1140,7 @@
           items.push({
             id,
             SKU: sku,
+            MODELO_COLOR: cols.modeloColor ? normalizarModeloColor(row[cols.modeloColor]) : "",
             MARCA: cols.marca ? limpiarTexto(row[cols.marca]) : "",
             GENERO: cols.genero ? limpiarTexto(row[cols.genero]) : "",
             TIPO: cols.tipo ? limpiarTexto(row[cols.tipo]) : "",
@@ -1276,7 +1279,8 @@
         const baseRial = await getCollectionData(collectionName("rial"));
         const subclases = await getCollectionData(collectionName("subclases"));
 
-        const skusRial = new Set(baseRial.map((item) => normalizarSku(item.SKU)));
+        const skusRial = new Set(baseRial.map((item) => normalizarSku(item.SKU)).filter(Boolean));
+        const modelosColorRial = new Set(baseRial.map((item) => normalizarModeloColor(item.MODELO_COLOR || item.modelo_color || item.MODELO_COLOR_SKU)).filter(Boolean));
         const mapaSubclases = new Map(subclases.map((item) => [normalizarSubclase(item.SUBCLASE), item]));
 
         const reporteNormalizado = reporteRows
@@ -1294,10 +1298,17 @@
           .filter((row) => row.sku !== "")
           .filter((row) => debeQuedarPendienteInterno(row));
 
-        const modelosColorYaTrabajados = new Set();
+        const modelosColorYaTrabajados = new Map();
 
         reporteNormalizado.forEach((row) => {
-          if (skusRial.has(row.sku)) modelosColorYaTrabajados.add(row.modeloColor);
+          if (row.modeloColor && modelosColorRial.has(row.modeloColor)) {
+            modelosColorYaTrabajados.set(row.modeloColor, "MODELO_COLOR");
+            return;
+          }
+
+          if (skusRial.has(row.sku)) {
+            modelosColorYaTrabajados.set(row.modeloColor, "SKU");
+          }
         });
 
         resultadoFormatoRial = [];
@@ -1306,7 +1317,11 @@
 
         reporteNormalizado.forEach((row) => {
           if (modelosColorYaTrabajados.has(row.modeloColor)) {
-            resultadoYaTrabajado.push({ ...row.original, ESTADO_CRUCE: "YA TRABAJADO RIAL" });
+            resultadoYaTrabajado.push({
+              ...row.original,
+              ESTADO_CRUCE: "YA TRABAJADO RIAL",
+              CRUCE_POR: modelosColorYaTrabajados.get(row.modeloColor)
+            });
             return;
           }
 
@@ -1396,6 +1411,7 @@
       $("subtitleBase").textContent = `${items.length.toLocaleString("es-CL")} SKU`;
       renderTabla("tableBase", "emptyBase", "noteBase", items.map((item) => ({
         SKU: item.SKU,
+        MODELO_COLOR: item.MODELO_COLOR,
         MARCA: item.MARCA,
         GENERO: item.GENERO,
         TIPO: item.TIPO,
@@ -1550,6 +1566,7 @@
       const items = await getCollectionData(collectionName("rial"));
       descargarExcel(items.map((item) => ({
         SKU: item.SKU,
+        MODELO_COLOR: item.MODELO_COLOR,
         MARCA: item.MARCA,
         GENERO: item.GENERO,
         TIPO: item.TIPO,
@@ -1570,13 +1587,13 @@
     }
 
     async function borrarBaseRial() {
-      const ok = confirm(`¿Borrar base RIAL completa?`);
+      const ok = confirm(`¿Borrar toda la base RIAL en Firestore?`);
       if (!ok) return;
       await deleteCollection(collectionName("rial"));
       await refrescarBase();
       $("mBaseNuevos").textContent = "0";
       $("mBaseActualizados").textContent = "0";
-      showMessage("msgRial", "ok", "Base borrada.");
+      showMessage("msgRial", "ok", "Base RIAL borrada. Puedes cargar la nueva base completa.");
     }
 
     async function borrarSubclases() {
@@ -1617,6 +1634,7 @@
       const headers = obtenerHeaders(rows);
       return {
         sku: buscarHeader(headers, ["sku", "id sku", "id_sku"]),
+        modeloColor: buscarHeader(headers, ["modelo_color", "modelo color", "modelocolor", "modelo-color", "modelo color sku", "modelo_color_sku"]),
         tipo: buscarHeader(headers, ["tipo prenda sku", "tipo", "tipo prenda"]),
         marca: buscarHeader(headers, ["marca", "brand"]),
         genero: buscarHeader(headers, ["genero", "género", "gender"]),
